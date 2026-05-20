@@ -1,4 +1,5 @@
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard,
   Building2,
@@ -9,6 +10,8 @@ import {
   Settings,
   Camera,
   LogOut,
+  Menu,
+  X,
 } from 'lucide-react';
 import { useAuth } from './auth-context';
 
@@ -24,41 +27,94 @@ const items = [
 
 export function Sidebar() {
   const { user, signOut } = useAuth();
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  // Close the drawer whenever the route changes.
+  useEffect(() => {
+    setOpen(false);
+  }, [location.pathname]);
+
+  // Lock body scroll when the mobile drawer is open.
+  useEffect(() => {
+    document.body.style.overflow = open ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [open]);
+
   return (
-    <aside className="sidebar">
-      <div className="brand">
-        <Camera size={22} color="#c4a766" />
-        Solo<span>Photography</span>
-      </div>
-      {items.map(({ to, label, icon: Icon, end }) => (
-        <NavLink
-          key={to}
-          to={to}
-          end={end}
-          className={({ isActive }) => (isActive ? 'navItem navItemActive' : 'navItem')}
-        >
-          <Icon size={17} />
-          {label}
-        </NavLink>
-      ))}
-      <div className="sidebarFoot">
-        <strong>Admin</strong>
-        <br />
-        {user?.email || 'solophotography@icloud.com'}
+    <>
+      {/* Mobile top bar with hamburger — hidden on desktop via CSS */}
+      <header className="mobileBar">
         <button
-          onClick={signOut}
-          className="navItem"
+          className="hamburger"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+        >
+          <Menu size={22} />
+        </button>
+        <div className="brand" style={{ margin: 0 }}>
+          <Camera size={18} color="#c4a766" />
+          Solo<span>Photography</span>
+        </div>
+        <div style={{ width: 36 }} />
+      </header>
+
+      {/* Backdrop for mobile drawer */}
+      {open && <div className="drawerBackdrop" onClick={() => setOpen(false)} />}
+
+      <aside className={`sidebar ${open ? 'sidebarOpen' : ''}`}>
+        <div
           style={{
-            marginTop: 10,
-            width: '100%',
-            background: 'transparent',
-            border: '1px solid rgba(245,243,239,0.08)',
-            fontFamily: 'inherit',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: 20,
           }}
         >
-          <LogOut size={15} /> Sign out
-        </button>
-      </div>
-    </aside>
+          <div className="brand" style={{ margin: 0 }}>
+            <Camera size={22} color="#c4a766" />
+            Solo<span>Photography</span>
+          </div>
+          <button
+            className="drawerClose"
+            onClick={() => setOpen(false)}
+            aria-label="Close menu"
+          >
+            <X size={20} />
+          </button>
+        </div>
+        {items.map(({ to, label, icon: Icon, end }) => (
+          <NavLink
+            key={to}
+            to={to}
+            end={end}
+            className={({ isActive }) => (isActive ? 'navItem navItemActive' : 'navItem')}
+          >
+            <Icon size={17} />
+            {label}
+          </NavLink>
+        ))}
+        <div className="sidebarFoot">
+          <strong>Admin</strong>
+          <br />
+          {user?.email}
+          <button
+            onClick={signOut}
+            className="navItem"
+            style={{
+              marginTop: 10,
+              width: '100%',
+              background: 'transparent',
+              border: '1px solid rgba(245,243,239,0.08)',
+              fontFamily: 'inherit',
+            }}
+          >
+            <LogOut size={15} /> Sign out
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

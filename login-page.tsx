@@ -66,8 +66,8 @@ export function LoginPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="solophotography@icloud.com"
-            autoComplete="email"
+            placeholder="Email"
+            autoComplete="off"
             disabled={submitting}
           />
           <label className="label">Password</label>
@@ -76,8 +76,8 @@ export function LoginPage() {
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="••••••••"
-            autoComplete="current-password"
+            placeholder="Password"
+            autoComplete="off"
             disabled={submitting}
           />
           {error && <div style={{ color: '#e88a7a', fontSize: 12, marginTop: -8 }}>{error}</div>}

@@ -80,4 +80,26 @@
 .galleryItem{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:14px;display:block;transition:transform .4s ease}
 .galleryItemLocked{filter:blur(18px) brightness(.7);pointer-events:none}
 .paywall{margin:40px auto;max-width:540px;text-align:center;padding:44px;background:rgba(245,243,239,.03);border:1px solid rgba(196,167,102,.18);border-radius:22px}
-@media (max-width:880px){.shell{grid-template-columns:1fr}.sidebar{position:relative;height:auto;flex-direction:row;overflow-x:auto;padding:14px}.sidebarFoot,.brand{display:none}.main{padding:18px}.galleryHeroContent{left:24px;right:24px;bottom:24px}.galleryTitle{font-size:36px}.galleryBody{padding:32px 20px}}
+.mobileBar{display:none}
+.hamburger,.drawerClose{display:none;background:transparent;border:1px solid rgba(245,243,239,.08);border-radius:10px;width:36px;height:36px;align-items:center;justify-content:center;color:#f5f3ef;cursor:pointer}
+.drawerBackdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99;backdrop-filter:blur(4px)}
+@media (max-width:880px){
+  .shell{grid-template-columns:1fr}
+  .mobileBar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:rgba(12,12,13,.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(245,243,239,.06);position:sticky;top:0;z-index:50}
+  .hamburger{display:inline-flex}
+  .drawerClose{display:inline-flex}
+  .drawerBackdrop{display:block}
+  .sidebar{position:fixed;top:0;left:0;height:100vh;width:280px;max-width:85vw;transform:translateX(-100%);transition:transform .25s ease;z-index:100;border-right:1px solid rgba(245,243,239,.08);background:rgba(12,12,13,.98);flex-direction:column;overflow-y:auto}
+  .sidebar.sidebarOpen{transform:translateX(0);box-shadow:8px 0 32px rgba(0,0,0,.6)}
+  .main{padding:18px}
+  .galleryHeroContent{left:24px;right:24px;bottom:24px}
+  .galleryTitle{font-size:36px}
+  .galleryBody{padding:32px 20px}
+  .topbar{flex-direction:column;align-items:stretch;gap:12px}
+  .topbar > div:last-child{flex-wrap:wrap}
+  .search{min-width:0;width:100%}
+  .pageTitle{font-size:24px}
+}
+@media (min-width:881px){
+  .drawerClose{display:none !important}
+}
